@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic
+numpy
+pandas
+scikit-learn
+joblib
+python-multipart
+shap
+sqlalchemy
+paho-mqtt
