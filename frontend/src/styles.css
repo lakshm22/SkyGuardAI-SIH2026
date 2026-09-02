@@ -1,0 +1,164 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * SkyGuard AI — mission-control design system.
+ * Dark instrumentation theme: deep navy surfaces, signal cyan accent,
+ * traffic-light severity tokens. All colors are oklch semantic tokens.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-panel: var(--panel);
+  --color-panel-header: var(--panel-header);
+  --color-grid: var(--grid);
+  --color-normal: var(--normal);
+  --color-warning: var(--warning);
+  --color-critical: var(--critical);
+  --color-temp: var(--temp);
+  --color-pressure: var(--pressure);
+  --color-humidity: var(--humidity);
+  --color-score: var(--score);
+  --shadow-panel: 0 1px 0 0 oklch(1 0 0 / 4%) inset, 0 12px 30px -18px oklch(0 0 0 / 80%);
+  --shadow-glow: 0 0 0 1px var(--ring), 0 0 22px -6px var(--primary);
+}
+
+:root {
+  --radius: 0.5rem;
+  --background: oklch(0.16 0.028 250);
+  --foreground: oklch(0.94 0.01 240);
+  --card: oklch(0.21 0.03 250);
+  --card-foreground: oklch(0.94 0.01 240);
+  --popover: oklch(0.19 0.03 250);
+  --popover-foreground: oklch(0.94 0.01 240);
+  --primary: oklch(0.78 0.14 205);
+  --primary-foreground: oklch(0.17 0.03 250);
+  --secondary: oklch(0.27 0.032 250);
+  --secondary-foreground: oklch(0.92 0.012 240);
+  --muted: oklch(0.25 0.03 250);
+  --muted-foreground: oklch(0.68 0.024 245);
+  --accent: oklch(0.3 0.045 250);
+  --accent-foreground: oklch(0.95 0.01 240);
+  --destructive: oklch(0.61 0.21 25);
+  --destructive-foreground: oklch(0.98 0.005 240);
+  --border: oklch(0.31 0.035 250);
+  --input: oklch(0.28 0.033 250);
+  --ring: oklch(0.68 0.12 205);
+  --panel: oklch(0.2 0.03 250);
+  --panel-header: oklch(0.24 0.034 250);
+  --grid: oklch(0.3 0.032 250);
+  --normal: oklch(0.76 0.17 150);
+  --warning: oklch(0.81 0.16 78);
+  --critical: oklch(0.65 0.21 25);
+  --temp: oklch(0.68 0.2 28);
+  --pressure: oklch(0.72 0.14 245);
+  --humidity: oklch(0.76 0.16 160);
+  --score: oklch(0.72 0.16 300);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(80rem 40rem at 15% -10%, oklch(0.3 0.06 210 / 35%), transparent 70%),
+      radial-gradient(60rem 40rem at 100% 0%, oklch(0.28 0.06 280 / 25%), transparent 70%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+@utility panel-surface {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+}
+
+@utility panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  background-color: var(--color-panel-header);
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+}
+
+@utility num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: currentColor;
+  box-shadow: 0 0 0 0 currentColor;
+  animation: skyguard-pulse 1.8s ease-out infinite;
+}
+
+@keyframes skyguard-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 70%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 0.5rem transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@utility scroll-slim {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
