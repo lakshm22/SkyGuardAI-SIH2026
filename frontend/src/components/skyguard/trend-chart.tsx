@@ -11,26 +11,29 @@ import type { Reading } from "@/lib/skyguard-api";
 
 export type SeriesKey = "temperature" | "pressure" | "humidity" | "anomaly_score";
 
-const SERIES: Record<SeriesKey, { label: string; color: string; axis: "left" | "right" }> = {
-  temperature: { label: "Temperature (°C)", color: "var(--color-temp)", axis: "left" },
-  pressure: { label: "Pressure (hPa)", color: "var(--color-pressure)", axis: "right" },
-  humidity: { label: "Humidity (%)", color: "var(--color-humidity)", axis: "left" },
-  anomaly_score: { label: "Anomaly Score", color: "var(--color-score)", axis: "left" },
+const SERIES: Record<SeriesKey, { label: string; color: string; axis: "weather" | "pressure" | "score" }> = {
+  temperature: { label: "Temperature (°C)", color: "var(--color-temp)", axis: "weather" },
+  pressure: { label: "Pressure (hPa)", color: "var(--color-pressure)", axis: "pressure" },
+  humidity: { label: "Humidity (%)", color: "var(--color-humidity)", axis: "weather" },
+  anomaly_score: { label: "Anomaly Score", color: "var(--color-score)", axis: "score" },
 };
 
 export function TrendChart({ data, visible }: { data: Reading[]; visible: SeriesKey[] }) {
-  const points = data.map((r) => ({
-    t: new Date(r.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    temperature: r.temperature,
-    pressure: r.pressure,
-    humidity: r.humidity,
-    anomaly_score: r.anomaly_score,
-  }));
+  const points = data
+    .filter((r) => r && r.timestamp)
+    .map((r) => ({
+      timestamp: new Date(r.timestamp).getTime(),
+      temperature: Number(r.temperature),
+      pressure: Number(r.pressure),
+      humidity: Number(r.humidity),
+      anomaly_score: Number(r.anomaly_score),
+    }))
+    .filter((r) => Number.isFinite(r.timestamp));
 
   if (points.length === 0) {
     return (
       <div className="flex h-full min-h-40 items-center justify-center text-sm text-muted-foreground">
-        No readings yet for this station.
+        No readings yet for this station. Start Live Monitor to stream telemetry.
       </div>
     );
   }
@@ -38,33 +41,56 @@ export function TrendChart({ data, visible }: { data: Reading[]; visible: Series
   return (
     <div className="h-56 w-full sm:h-64">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={points} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
+        <LineChart data={points} margin={{ top: 8, right: 10, bottom: 0, left: -12 }}>
           <CartesianGrid stroke="var(--color-grid)" strokeDasharray="3 4" vertical={false} />
           <XAxis
-            dataKey="t"
+            dataKey="timestamp"
+            type="number"
+            domain={["dataMin", "dataMax"]}
+            tickFormatter={(value) => new Date(value).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             tick={{ fill: "var(--color-muted-foreground)", fontSize: 10 }}
             tickLine={false}
             axisLine={{ stroke: "var(--color-grid)" }}
-            minTickGap={24}
+            minTickGap={28}
           />
           <YAxis
-            yAxisId="left"
-            width={44}
-            domain={[0, 100]}
+            yAxisId="weather"
+            width={42}
+            domain={["auto", "auto"]}
             tick={{ fill: "var(--color-muted-foreground)", fontSize: 10 }}
             tickLine={false}
             axisLine={false}
           />
           <YAxis
-            yAxisId="right"
+            yAxisId="pressure"
             orientation="right"
             width={48}
-            domain={["dataMin - 3", "dataMax + 3"]}
+            domain={["auto", "auto"]}
             tick={{ fill: "var(--color-pressure)", fontSize: 10 }}
             tickLine={false}
             axisLine={false}
           />
+          <YAxis
+            yAxisId="score"
+            orientation="right"
+            width={42}
+            domain={[0, 1]}
+            hide
+          />
           <Tooltip
+            labelFormatter={(value) => new Date(Number(value)).toLocaleString([], {
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
+            formatter={(value, name) => {
+              if (name === "Anomaly Score") return [Number(value).toFixed(2), name];
+              if (name === "Pressure (hPa)") return [Number(value).toFixed(1), name];
+              if (name === "Humidity (%)") return [Number(value).toFixed(1), name];
+              return [Number(value).toFixed(1), name];
+            }}
             contentStyle={{
               background: "var(--color-popover)",
               border: "1px solid var(--color-border)",
@@ -83,6 +109,7 @@ export function TrendChart({ data, visible }: { data: Reading[]; visible: Series
               stroke={SERIES[key].color}
               strokeWidth={2}
               dot={false}
+              connectNulls
               isAnimationActive={false}
             />
           ))}
