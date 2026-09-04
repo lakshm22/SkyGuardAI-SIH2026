@@ -1,160 +1,32 @@
-# ============================================================
-# SkyGuard AI - Git Ignore
-# ============================================================
-
-# -------------------------
-# Python
-# -------------------------
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-
-# Virtual environments
-.venv/
-venv/
-env/
-ENV/
-.skyguard/
-*.egg-info/
-.eggs/
-dist/
-build/
-
-# -------------------------
-# Anaconda / Conda
-# -------------------------
-.conda/
-conda-meta/
-environment.yml.local
-
-# -------------------------
-# Environment / Secrets
-# -------------------------
-.env
-.env.*
-!.env.example
-
-# -------------------------
-# Database
-# -------------------------
-*.db
-*.sqlite
-*.sqlite3
-
-# -------------------------
-# Machine Learning Models
-# -------------------------
-# Ignore generated/local model files if they are large
-*.joblib
-*.pkl
-*.pickle
-*.h5
-*.keras
-*.onnx
-
-# Keep a models directory structure if needed
-!models/.gitkeep
-
-# -------------------------
-# Data
-# -------------------------
-# Ignore local/generated datasets
-*.csv
-*.parquet
-*.feather
-
-# Keep sample data if you explicitly want it in Git
-!data/sample/
-!data/sample/*.csv
-
-# -------------------------
 # Logs
-# -------------------------
+logs
 *.log
-logs/
-*.out
-
-# -------------------------
-# Jupyter
-# -------------------------
-.ipynb_checkpoints/
-
-# -------------------------
-# VS Code
-# -------------------------
-.vscode/
-!.vscode/extensions.json
-!.vscode/settings.json
-
-# -------------------------
-# PyCharm / IntelliJ
-# -------------------------
-.idea/
-*.iml
-
-# -------------------------
-# Windows
-# -------------------------
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-Desktop.ini
-
-# -------------------------
-# macOS
-# -------------------------
-.DS_Store
-
-# -------------------------
-# Node / React / Vite
-# -------------------------
-node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
-# Vite
-dist/
-.vite/
+node_modules
+dist
+dist-ssr
+.output
+.vinxi
+.tanstack/**
+.nitro
+*.local
 
-# -------------------------
-# Frontend Environment
-# -------------------------
-frontend/.env
-frontend/.env.*
-!frontend/.env.example
+# Wrangler / Cloudflare
+.wrangler/
+.dev.vars
 
-# -------------------------
-# Backend Environment
-# -------------------------
-backend/.env
-backend/.env.*
-!backend/.env.example
-
-# -------------------------
-# Coverage / Testing
-# -------------------------
-.coverage
-.coverage.*
-htmlcov/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-
-# -------------------------
-# Temporary Files
-# -------------------------
-*.tmp
-*.temp
-*.bak
-*.swp
-*.swo
-*~
-
-# -------------------------
-# OS / IDE Metadata
-# -------------------------
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-*.code-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
