@@ -9,3 +9,8 @@ python-multipart
 shap
 sqlalchemy
 paho-mqtt
+
+reportlab
+
+psycopg[binary]
+python-dotenv

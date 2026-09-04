@@ -71,11 +71,21 @@ class AnomalyEngine:
             "Spatial mismatch": spatial,
             "Data pattern deviation": max(temporal,frozen)
         }
-        score = float(np.clip(
+        weighted = (
             0.45*ml + 0.20*flags["temperature_range"] +
             0.12*flags["pressure_deviation"] + 0.10*flags["humidity_extreme"] +
-            0.08*spatial + 0.05*max(temporal,frozen), 0, 1
-        ))
+            0.08*spatial + 0.05*max(temporal,frozen)
+        )
+        # Domain extremes must be able to trigger an alert even when the
+        # unsupervised model has not yet seen enough local history.
+        domain_floor = max(
+            0.80*flags["temperature_range"],
+            0.72*flags["pressure_deviation"],
+            0.82*flags["humidity_extreme"],
+            0.90*flags["cross_parameter"],
+            0.72*max(temporal,frozen)
+        )
+        score = float(np.clip(max(weighted, domain_floor), 0, 1))
         anomaly = score >= 0.60
         severity = "Critical" if score >= 0.82 else "Warning" if score >= 0.60 else "Normal"
         confidence = float(np.clip(0.50 + score*0.50, 0, 0.99))
