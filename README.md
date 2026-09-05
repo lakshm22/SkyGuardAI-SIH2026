@@ -866,14 +866,14 @@ The system can help monitoring teams identify potentially faulty or abnormal sta
 
 ## Team Members
 
-| Name       | Role                    |
-| ---------- | ----------------------- |
-| [Member 1] | Team Lead / Backend     |
-| [Member 2] | AI/ML                   |
-| [Member 3] | Frontend                |
-| [Member 4] | Database / Cloud        |
-| [Member 5] | Testing / Documentation |
-| [Member 6] | Research / Integration  |
+| Name       | Role                                      |
+| ---------- | ----------------------------------------- |
+| [Lakshitha M] | Team Lead / Backend (8 hrs)            |
+| [Lathika S] | AI/ML (7 hrs)                            |
+| [Malathi S] | Frontend (5 hrs)                         |
+| [Lakshana M] | Database / Cloud (4 hrs)                |
+| [Keerthanapriya V C] | Testing / Documentation (4 hrs) |
+| [Mahalakshmi M] | Research / Integration (5 hrs)       |
 
 ---
 
