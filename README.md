@@ -868,12 +868,14 @@ The system can help monitoring teams identify potentially faulty or abnormal sta
 
 | Name       | Role                                      |
 | ---------- | ----------------------------------------- |
-| [Lakshitha M] | Team Lead / Backend (8 hrs)            |
-| [Lathika S] | AI/ML (7 hrs)                            |
-| [Malathi S] | Frontend (5 hrs)                         |
-| [Lakshana M] | Database / Cloud (4 hrs)                |
-| [Keerthanapriya V C] | Testing / Documentation (4 hrs) |
-| [Mahalakshmi M] | Research / Integration (5 hrs)       |
+| Lakshitha Mathiyalagan | Team Lead / Backend (8 hrs)            |
+| Lathika S | AI/ML (7 hrs)                            |
+| Malathi S | Frontend (5 hrs)                         |
+| Lakshana M | Database / Cloud (4 hrs)                |
+| Keerthanapriya V C | Testing / Documentation (4 hrs) |
+| Mahalakshmi M | Research / Integration (5 hrs)       |
+
+Total Development duration: 36 hrs
 
 ---
 
