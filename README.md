@@ -1,6 +1,6 @@
 # 🚀 SkyGuard AI
 
-## AI-Powered Anomaly Detection and Monitoring System for Automatic Weather Stations
+AI-Powered Anomaly Detection and Monitoring System for Automatic Weather Stations.
 
 **Smart India Hackathon (SIH) Project**
 
