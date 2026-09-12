@@ -161,9 +161,8 @@ Detected anomalies are categorized according to their severity.
 | Severity               | Meaning                                 |
 | ---------------------- | --------------------------------------- |
 | 🟢 **Normal**          | Expected sensor behavior                |
-| 🟡 **Low**             | Minor abnormality                       |
-| 🟠 **Medium**          | Significant anomaly requiring attention |
-| 🔴 **High / Critical** | Severe or potentially faulty condition  |
+| 🟡 **Warning**             | Significant anomaly requiring attention |
+| 🔴 **Critical** | Severe or potentially faulty condition  |
 
 ---
 
