@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import math
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, String, Float, DateTime, Boolean, Text, Integer
+from sqlalchemy import create_engine, String, Float, DateTime, Boolean, Text, Integer, inspect, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
 load_dotenv()
@@ -52,6 +52,10 @@ class Reading(Base):
     corrected_temperature: Mapped[float | None] = mapped_column(Float, nullable=True)
     corrected_pressure: Mapped[float | None] = mapped_column(Float, nullable=True)
     corrected_humidity: Mapped[float | None] = mapped_column(Float, nullable=True)
+    shap_values_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    xai_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    device_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
 
 class Alert(Base):
@@ -87,6 +91,19 @@ def init_db():
         with engine.begin() as conn:
             conn.execute(text(f'CREATE SCHEMA IF NOT EXISTS "{SCHEMA}"'))
     Base.metadata.create_all(engine)
+    # Lightweight forward migration for existing SQLite/PostgreSQL deployments.
+    columns = {c["name"] for c in inspect(engine).get_columns("readings", schema=SCHEMA if is_postgres else None)}
+    qualified = f'"{SCHEMA}"."readings"' if is_postgres else 'readings'
+    migrations = {
+        'shap_values_json': 'TEXT',
+        'xai_json': 'TEXT',
+        'source': 'VARCHAR(40)',
+        'device_id': 'VARCHAR(100)',
+    }
+    with engine.begin() as conn:
+        for column, sql_type in migrations.items():
+            if column not in columns:
+                conn.execute(text(f'ALTER TABLE {qualified} ADD COLUMN {column} {sql_type}'))
     db = SessionLocal()
     defaults = [
         ('AWS01','Chennai AWS-01',13.0827,80.2707,96,'Normal'),

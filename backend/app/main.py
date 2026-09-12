@@ -25,7 +25,16 @@ def db():
     finally: s.close()
 
 def _reading(r):
-    return {'id':r.id,'station_id':r.station_id,'timestamp':r.timestamp,'temperature':r.temperature,'pressure':r.pressure,'humidity':r.humidity,'anomaly':r.anomaly,'anomaly_score':r.score,'confidence':r.confidence,'severity':r.severity,'root_cause':r.root_cause,'explanation':r.explanation,'corrected_values':({'temperature':r.corrected_temperature,'pressure':r.corrected_pressure,'humidity':r.corrected_humidity} if r.corrected_temperature is not None else None)}
+    import json
+    shap_values = None
+    xai = None
+    if getattr(r, 'shap_values_json', None):
+        try: shap_values = json.loads(r.shap_values_json)
+        except Exception: shap_values = None
+    if getattr(r, 'xai_json', None):
+        try: xai = json.loads(r.xai_json)
+        except Exception: xai = None
+    return {'id':r.id,'station_id':r.station_id,'timestamp':r.timestamp,'temperature':r.temperature,'pressure':r.pressure,'humidity':r.humidity,'anomaly':r.anomaly,'anomaly_score':r.score,'confidence':r.confidence,'severity':r.severity,'root_cause':r.root_cause,'explanation':r.explanation,'corrected_values':({'temperature':r.corrected_temperature,'pressure':r.corrected_pressure,'humidity':r.corrected_humidity} if r.corrected_temperature is not None else None),'shap_values':shap_values,'xai':xai,'source':getattr(r,'source',None),'device_id':getattr(r,'device_id',None)}
 
 def _alert(a):
     return {'id':a.id,'station_id':a.station_id,'timestamp':a.timestamp,'parameter':a.parameter,'severity':a.severity,'score':a.score,'status':a.status,'root_cause':a.root_cause,'explanation':a.explanation}
@@ -58,7 +67,7 @@ def delete_station(station_id:str,db:Session=Depends(db),_:bool=Depends(require_
 
 @app.post('/api/readings')
 def ingest(payload:SensorReading):
-    return process(payload)
+    return process(payload, source=payload.source, device_id=payload.device_id)
 
 @app.get('/api/stations/{station_id}/latest')
 def latest(station_id:str,db:Session=Depends(db)):
@@ -67,9 +76,14 @@ def latest(station_id:str,db:Session=Depends(db)):
     return _reading(r)
 
 @app.get('/api/stations/{station_id}/trend')
-def trend(station_id:str,hours:int=Query(1,ge=1,le=168),db:Session=Depends(db)):
+def trend(station_id:str,hours:int=Query(1,ge=1,le=168),limit:int=Query(240,ge=1,le=1000),db:Session=Depends(db)):
     since=datetime.utcnow()-timedelta(hours=hours)
-    return [_reading(r) for r in db.query(Reading).filter(Reading.station_id==station_id,Reading.timestamp>=since).order_by(Reading.timestamp.asc()).all()]
+    rows=(db.query(Reading)
+          .filter(Reading.station_id==station_id,Reading.timestamp>=since)
+          .order_by(Reading.timestamp.desc())
+          .limit(limit)
+          .all())
+    return [_reading(r) for r in reversed(rows)]
 
 @app.get('/api/alerts')
 def alerts(limit:int=Query(50,ge=1,le=500),status:str|None=None,db:Session=Depends(db)):
@@ -92,14 +106,23 @@ def simulate(payload:SimulationRequest, _:bool=Depends(require_admin)):
       'humidity_spike':{'temperature':31,'pressure':1008,'humidity':99},
       'multi_parameter_spike':{'temperature':55,'pressure':975,'humidity':99},
       'frozen_value':{'temperature':44,'pressure':985,'humidity':20},
-      'communication_error':{'temperature':-80,'pressure':850,'humidity':0},
+      'communication_error':None,
+      'regional_event':{'temperature':42,'pressure':1002,'humidity':82},
     }
     base=patterns[payload.anomaly_type]; results=[]
-    runs = max(payload.count, 6) if payload.anomaly_type == 'frozen_value' else payload.count
+    if payload.anomaly_type == 'communication_error':
+        # A communication fault is represented by a telemetry gap, not by fake
+        # impossible sensor values. Send one reading with a stale timestamp so
+        # the ingestion pipeline can diagnose the missing interval.
+        stale = datetime.utcnow() + timedelta(minutes=5)
+        r=SensorReading(station_id=payload.station_id,temperature=29.5,pressure=1008,humidity=70,timestamp=stale, source='simulation', device_id='SIMULATOR')
+        results.append(process(r, source='simulation', device_id='SIMULATOR'))
+        return {'count':1,'results':results,'note':'Communication failure simulated as a telemetry timestamp gap.'}
+    runs = max(payload.count, 8) if payload.anomaly_type == 'frozen_value' else payload.count
     for i in range(runs):
         jitter=0 if payload.anomaly_type != 'normal' else random.uniform(-1,1)
-        r=SensorReading(station_id=payload.station_id,temperature=base['temperature']+jitter,pressure=base['pressure']+jitter,humidity=max(0,min(100,base['humidity']+jitter)),timestamp=datetime.utcnow()+timedelta(milliseconds=i))
-        results.append(process(r))
+        r=SensorReading(station_id=payload.station_id,temperature=base['temperature']+jitter,pressure=base['pressure']+jitter,humidity=max(0,min(100,base['humidity']+jitter)),timestamp=datetime.utcnow()+timedelta(milliseconds=i), source='simulation', device_id='SIMULATOR')
+        results.append(process(r, source='simulation', device_id='SIMULATOR'))
     return {'count':len(results),'results':results}
 
 @app.get('/api/monitor')
@@ -115,6 +138,17 @@ async def set_monitor(payload:MonitorConfig,_:bool=Depends(require_admin)):
         monitor.start_background()
     return monitor.status()
 
+@app.get('/api/telemetry/health')
+def telemetry_health(stale_after_seconds: int = Query(30, ge=5, le=3600), db: Session = Depends(db)):
+    now = datetime.utcnow()
+    rows = []
+    for s in db.query(Station).order_by(Station.station_id).all():
+        age = None if s.last_seen is None else max(0.0, (now - s.last_seen).total_seconds())
+        stale = age is None or age > stale_after_seconds
+        rows.append({'station_id': s.station_id, 'name': s.name, 'last_seen': s.last_seen, 'age_seconds': round(age,1) if age is not None else None, 'stale': stale, 'status': 'OFFLINE' if stale else 'ONLINE'})
+    return {'checked_at': now, 'stale_after_seconds': stale_after_seconds, 'stations': rows}
+
+
 @app.get('/api/dashboard/{station_id}')
 def dashboard(station_id:str,db:Session=Depends(db)):
     s=db.query(Station).filter_by(station_id=station_id).first()
@@ -123,6 +157,18 @@ def dashboard(station_id:str,db:Session=Depends(db)):
     recent=db.query(Reading).filter_by(station_id=station_id).order_by(Reading.timestamp.desc()).limit(240).all()
     active=db.query(Alert).filter(Alert.station_id==station_id,Alert.status=='Active').order_by(Alert.timestamp.desc()).first()
     return {'station':_station(s),'latest':_reading(latest_r) if latest_r else None,'trend':[ _reading(x) for x in reversed(recent)],'latest_alert':_alert(active) if active else None}
+
+
+@app.get('/api/stations/{station_id}/analytics')
+def analytics(station_id: str, db: Session = Depends(db)):
+    s = db.query(Station).filter_by(station_id=station_id).first()
+    if not s:
+        raise HTTPException(404, 'Station not found')
+    from app.services.advanced_analytics import maintenance_forecast, seasonal_baseline
+    baseline = seasonal_baseline(db, station_id, datetime.utcnow())
+    maintenance = maintenance_forecast(db, station_id, s.health)
+    latest = db.query(Reading).filter_by(station_id=station_id).order_by(Reading.timestamp.desc()).first()
+    return {'station_id': station_id, 'seasonal_baseline': baseline, 'maintenance_forecast': maintenance, 'latest': _reading(latest) if latest else None}
 
 @app.get('/api/export/report.pdf')
 def export_pdf(station_id:str|None=None,db:Session=Depends(db),_:bool=Depends(require_admin)):

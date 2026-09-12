@@ -161,9 +161,8 @@ Detected anomalies are categorized according to their severity.
 | Severity               | Meaning                                 |
 | ---------------------- | --------------------------------------- |
 | 🟢 **Normal**          | Expected sensor behavior                |
-| 🟡 **Low**             | Minor abnormality                       |
-| 🟠 **Medium**          | Significant anomaly requiring attention |
-| 🔴 **High / Critical** | Severe or potentially faulty condition  |
+| 🟡 **Warning**             | Significant anomaly requiring attention |
+| 🔴 **Critical** | Severe or potentially faulty condition  |
 
 ---
 
@@ -394,59 +393,153 @@ This approach combines the adaptability of Machine Learning with the interpretab
 
 ```text
 SkyGuard-AI/
-│
-├── backend/
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── main.py
-│   │   ├── database.py
-│   │   ├── models.py
-│   │   ├── schemas.py
-│   │   ├── auth.py
-│   │   │
-│   │   └── services/
-│   │       ├── __init__.py
-│   │       ├── anomaly_service.py
-│   │       ├── ml_engine.py
-│   │       └── monitor.py
-│   │
-│   ├── data/
-│   │   └── skyguard.db
-│   │
-│   ├── models/
-│   │   └── isolation_forest.joblib
-│   │
-│   ├── .env.example
-│   ├── requirements.txt
-│   └── run.py
-│
-├── frontend/
-│   ├── public/
-│   │
-│   ├── src/
-│   │   ├── components/
-│   │   │   └── skyguard/
-│   │   │       ├── network-map.tsx
-│   │   │       └── trend-chart.tsx
-│   │   │
-│   │   ├── lib/
-│   │   │   └── skyguard-api.ts
-│   │   │
-│   │   ├── routes/
-│   │   │   ├── __root.tsx
-│   │   │   └── index.tsx
-│   │   │
-│   │   ├── styles.css
-│   │   └── main.tsx
-│   │
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── vite.config.ts
-│   └── tsconfig.json
-│
-├── .gitignore
-├── render.yaml
 └── README.md
+    │
+    ├── backend/
+    │   ├── README.md
+    │   ├── FRONTEND_INTEGRATION.md
+    │   ├── requirements.txt
+    │   ├── run.py
+    │   ├── .env.example
+    │   ├── .gitignore
+    │   │
+    │   ├── app/
+    │   │   ├── __init__.py
+    │   │   ├── main.py
+    │   │   ├── auth.py
+    │   │   ├── database.py
+    │   │   ├── schemas.py
+    │   │   ├── report.py
+    │   │   │
+    │   │   └── services/
+    │   │       ├── __init__.py
+    │   │       ├── anomaly_service.py
+    │   │       ├── advanced_analytics.py
+    │   │       ├── explainability.py
+    │   │       ├── ml_engine.py
+    │   │       └── monitor.py
+    │   │
+    │   ├── simulator/
+    │   │   ├── __init__.py
+    │   │   ├── stream.py
+    │   │   ├── demo_runbook.py
+    │   │   └── README.md
+    │   │
+    │   ├── evaluation/
+    │   │   ├── evaluate_anomaly_detection.py
+    │   │   └── README.md
+    │   │
+    │   ├── models/
+    │   │   └── isolation_forest.joblib
+    │   │
+    │   └── data/
+    │       └── skyguard.db
+    │
+    ├── frontend/
+    │   ├── package.json
+    │   ├── package-lock.json
+    │   ├── vite.config.ts
+    │   ├── tsconfig.json
+    │   ├── eslint.config.js
+    │   ├── .prettierrc
+    │   ├── .gitignore
+    │   ├── bunfig.toml
+    │   ├── components.json
+    │   ├── render.yaml
+    │   ├── README.md
+    │   ├── AGENTS.md
+    │   │
+    │   ├── public/
+    │   │
+    │   └── src/
+    │       ├── router.tsx
+    │       ├── server.ts
+    │       ├── start.ts
+    │       ├── routeTree.gen.ts
+    │       ├── styles.css
+    │       │
+    │       ├── routes/
+    │       │   ├── __root.tsx
+    │       │   ├── index.tsx
+    │       │   └── README.md
+    │       │
+    │       ├── components/
+    │       │   ├── skyguard/
+    │       │   │   ├── api-settings.tsx
+    │       │   │   ├── network-map.tsx
+    │       │   │   ├── panel.tsx
+    │       │   │   └── trend-chart.tsx
+    │       │   │
+    │       │   └── ui/
+    │       │       ├── accordion.tsx
+    │       │       ├── alert-dialog.tsx
+    │       │       ├── alert.tsx
+    │       │       ├── aspect-ratio.tsx
+    │       │       ├── avatar.tsx
+    │       │       ├── badge.tsx
+    │       │       ├── breadcrumb.tsx
+    │       │       ├── button.tsx
+    │       │       ├── calendar.tsx
+    │       │       ├── card.tsx
+    │       │       ├── carousel.tsx
+    │       │       ├── chart.tsx
+    │       │       ├── checkbox.tsx
+    │       │       ├── collapsible.tsx
+    │       │       ├── command.tsx
+    │       │       ├── context-menu.tsx
+    │       │       ├── dialog.tsx
+    │       │       ├── drawer.tsx
+    │       │       ├── dropdown-menu.tsx
+    │       │       ├── form.tsx
+    │       │       ├── hover-card.tsx
+    │       │       ├── input-otp.tsx
+    │       │       ├── input.tsx
+    │       │       ├── label.tsx
+    │       │       ├── menubar.tsx
+    │       │       ├── navigation-menu.tsx
+    │       │       ├── pagination.tsx
+    │       │       ├── popover.tsx
+    │       │       ├── progress.tsx
+    │       │       ├── radio-group.tsx
+    │       │       ├── resizable.tsx
+    │       │       ├── scroll-area.tsx
+    │       │       ├── select.tsx
+    │       │       ├── separator.tsx
+    │       │       ├── sheet.tsx
+    │       │       ├── sidebar.tsx
+    │       │       ├── skeleton.tsx
+    │       │       ├── slider.tsx
+    │       │       ├── sonner.tsx
+    │       │       ├── switch.tsx
+    │       │       ├── table.tsx
+    │       │       ├── tabs.tsx
+    │       │       ├── textarea.tsx
+    │       │       ├── toggle-group.tsx
+    │       │       ├── toggle.tsx
+    │       │       └── tooltip.tsx
+    │       │
+    │       ├── hooks/
+    │       │   └── use-mobile.tsx
+    │       │
+    │       └── lib/
+    │           ├── utils.ts
+    │           ├── error-capture.ts
+    │           ├── error-page.ts
+    │           ├── lovable-error-reporting.ts
+    │           └── skyguard-api.ts
+    │
+    ├── docs/
+    │   ├── EXPLAINABLE_AI.md
+    │   ├── XAI_ARCHITECTURE.md
+    │   ├── SIH_COMPLIANCE.md
+    │   ├── SOFTWARE_ONLY_DEMO.md
+    │   ├── SIH_USE_CASES.md
+    │   ├── REAL_AWS_STREAMING.md
+    │   └── LIVE_GRAPH_FIX.md
+    │
+    └── esp32/
+        ├── README.md
+        └── skyguard_esp32_bme280.ino
 ```
 
 ---
