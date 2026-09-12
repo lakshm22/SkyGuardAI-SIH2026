@@ -447,7 +447,6 @@ SkyGuard-AI/
     │   ├── components.json
     │   ├── render.yaml
     │   ├── README.md
-    │   ├── AGENTS.md
     │   │
     │   ├── public/
     │   │
