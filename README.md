@@ -73,7 +73,7 @@ Instead of depending only on fixed thresholds, the system evaluates telemetry us
 
 ---
 
-## 🎯 Key Objectives
+### 🎯 Key Objectives
 
 * Detect anomalous AWS sensor readings automatically.
 * Reduce false positives compared with simple threshold systems.
@@ -87,9 +87,9 @@ Instead of depending only on fixed thresholds, the system evaluates telemetry us
 
 ---
 
-# ⭐ Key Features
+## ⭐ Key Features
 
-## 1. 🤖 AI-Based Anomaly Detection
+### 1. 🤖 AI-Based Anomaly Detection
 
 SkyGuard AI uses an **Isolation Forest** model to identify observations that differ significantly from normal telemetry patterns.
 
@@ -97,7 +97,7 @@ The model can detect anomalies across multiple sensor parameters instead of eval
 
 ---
 
-## 2. 🧠 Hybrid Anomaly Detection
+### 2. 🧠 Hybrid Anomaly Detection
 
 Machine Learning is combined with deterministic domain rules.
 
@@ -115,17 +115,17 @@ This provides a more reliable anomaly decision than using ML alone.
 
 ---
 
-## 3. 📈 Temporal Analysis
+### 3. 📈 Temporal Analysis
 
 The system analyzes sensor behavior over time.
 
-### Normal
+#### Normal
 
 ```text
 25°C → 25.2°C → 25.4°C → 25.6°C
 ```
 
-### Potential Anomaly
+#### Potential Anomaly
 
 ```text
 25°C → 25.3°C → 25.5°C → 80°C
@@ -135,7 +135,7 @@ A sudden unrealistic change can be flagged even when a simple static threshold m
 
 ---
 
-## 4. 🌍 Spatial Analysis
+### 4. 🌍 Spatial Analysis
 
 AWS stations can be distributed across different geographical locations.
 
@@ -154,7 +154,7 @@ This helps identify potentially faulty sensors or abnormal measurements.
 
 ---
 
-## 5. 🚨 Severity Classification
+### 5. 🚨 Severity Classification
 
 Detected anomalies are categorized according to their severity.
 
@@ -166,7 +166,7 @@ Detected anomalies are categorized according to their severity.
 
 ---
 
-## 6. 📊 Interactive Dashboard
+### 6. 📊 Interactive Dashboard
 
 The frontend provides a centralized monitoring dashboard with:
 
@@ -182,7 +182,7 @@ The frontend provides a centralized monitoring dashboard with:
 
 ---
 
-## 7. 🗺️ Network / Station Map
+### 7. 🗺️ Network / Station Map
 
 The dashboard provides a geographical visualization of AWS stations.
 
@@ -195,7 +195,7 @@ Users can identify:
 
 ---
 
-## 8. 📉 Trend Visualization
+### 8. 📉 Trend Visualization
 
 Historical sensor readings can be visualized through charts.
 
@@ -211,7 +211,7 @@ This helps operators understand whether an anomaly is isolated or part of a larg
 
 ---
 
-# 🏗️ System Architecture
+## 🏗️ System Architecture
 
 ```text
                         ┌─────────────────────┐
@@ -261,7 +261,7 @@ This helps operators understand whether an anomaly is isolated or part of a larg
 
 ---
 
-# 🔄 Data Flow
+## 🔄 Data Flow
 
 ```text
 AWS Sensor
@@ -291,9 +291,9 @@ Operator Alert
 
 ---
 
-# 🧠 Machine Learning Approach
+## 🧠 Machine Learning Approach
 
-## Isolation Forest
+### Isolation Forest
 
 SkyGuard AI uses the **Isolation Forest** algorithm for unsupervised anomaly detection.
 
@@ -313,7 +313,7 @@ Identify Unusual Observations
 
 Anomalous observations are easier to isolate because they are different from the majority of normal observations.
 
-### Why Isolation Forest?
+#### Why Isolation Forest?
 
 | Requirement                    | Isolation Forest |
 | ------------------------------ | ---------------- |
@@ -326,7 +326,7 @@ Anomalous observations are easier to isolate because they are different from the
 
 ---
 
-# 🧮 Hybrid Anomaly Score
+## 🧮 Hybrid Anomaly Score
 
 The final anomaly decision is **not based solely on the ML model**.
 
@@ -350,9 +350,9 @@ This approach combines the adaptability of Machine Learning with the interpretab
 
 ---
 
-# 🛠️ Technology Stack
+## 🛠️ Technology Stack
 
-## Backend
+### Backend
 
 * Python
 * FastAPI
@@ -361,7 +361,7 @@ This approach combines the adaptability of Machine Learning with the interpretab
 * Scikit-learn
 * Joblib
 
-## Frontend
+### Frontend
 
 * React
 * TypeScript
@@ -370,18 +370,18 @@ This approach combines the adaptability of Machine Learning with the interpretab
 * Recharts
 * Leaflet
 
-## Database
+### Database
 
 * PostgreSQL
 * Supabase
 
-## Machine Learning
+### Machine Learning
 
 * Scikit-learn
 * Isolation Forest
 * Feature-based anomaly scoring
 
-## Deployment
+### Deployment
 
 * Render
 * Supabase
@@ -389,7 +389,7 @@ This approach combines the adaptability of Machine Learning with the interpretab
 
 ---
 
-# 📁 Project Structure
+## 📁 Project Structure
 
 ```text
 SkyGuard-AI/
@@ -544,9 +544,9 @@ SkyGuard-AI/
 
 ---
 
-# ⚙️ Installation
+## ⚙️ Installation
 
-## Prerequisites
+### Prerequisites
 
 Install the following:
 
@@ -558,40 +558,40 @@ Install the following:
 
 ---
 
-# 🔧 Backend Setup
+## 🔧 Backend Setup
 
-## 1. Clone the Repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/<your-username>/SkyGuard-AI.git
 cd SkyGuard-AI
 ```
 
-## 2. Navigate to the Backend
+### 2. Navigate to the Backend
 
 ```bash
 cd backend
 ```
 
-## 3. Create a Virtual Environment
+### 3. Create a Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-### Windows
+#### Windows
 
 ```bash
 venv\Scripts\activate
 ```
 
-### Linux / macOS
+#### Linux / macOS
 
 ```bash
 source venv/bin/activate
 ```
 
-## 4. Install Dependencies
+### 4. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -599,7 +599,7 @@ pip install -r requirements.txt
 
 ---
 
-# 🔐 Environment Variables
+## 🔐 Environment Variables
 
 Create a `.env` file inside the `backend` directory.
 
@@ -620,7 +620,7 @@ Use `.env.example` to document the required environment variables.
 
 ---
 
-# ▶️ Run Backend
+## ▶️ Run Backend
 
 From the `backend` directory:
 
@@ -642,23 +642,23 @@ http://localhost:8000/docs
 
 ---
 
-# 💻 Frontend Setup
+## 💻 Frontend Setup
 
 Open another terminal.
 
-## 1. Navigate to the Frontend
+### 1. Navigate to the Frontend
 
 ```bash
 cd frontend
 ```
 
-## 2. Install Dependencies
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-## 3. Start the Development Server
+### 3. Start the Development Server
 
 ```bash
 npm run dev
@@ -672,7 +672,7 @@ http://localhost:5173
 
 ---
 
-# 🔌 API Architecture
+## 🔌 API Architecture
 
 The frontend communicates with the backend through REST APIs.
 
@@ -705,7 +705,7 @@ The API layer provides separation between:
 
 ---
 
-# 🔒 Security
+## 🔒 Security
 
 SkyGuard AI incorporates several security practices:
 
@@ -730,11 +730,11 @@ Production deployments should additionally use:
 
 ---
 
-# 📊 Dashboard
+## 📊 Dashboard
 
 The dashboard provides a centralized view of AWS infrastructure.
 
-## Main Components
+### Main Components
 
 ```text
 ┌───────────────────────────────────────────────┐
@@ -758,7 +758,7 @@ The dashboard provides a centralized view of AWS infrastructure.
 
 ---
 
-# 🚨 Example Anomaly Scenario
+## 🚨 Example Anomaly Scenario
 
 Suppose an AWS normally reports:
 
@@ -856,11 +856,11 @@ The architecture is designed to support future improvements.
 
 ---
 
-# 🧪 Testing
+## 🧪 Testing
 
 The system can be tested using normal and abnormal telemetry.
 
-## Normal Telemetry
+### Normal Telemetry
 
 ```json
 {
@@ -870,7 +870,7 @@ The system can be tested using normal and abnormal telemetry.
 }
 ```
 
-## Abnormal Telemetry
+### Abnormal Telemetry
 
 ```json
 {
@@ -884,9 +884,9 @@ The anomaly engine evaluates the input and generates the corresponding anomaly s
 
 ---
 
-# 📦 Deployment
+## 📦 Deployment
 
-## Backend
+### Backend
 
 The FastAPI backend can be deployed using **Render**.
 
@@ -896,17 +896,17 @@ Deployment configuration is provided through:
 render.yaml
 ```
 
-## Database
+### Database
 
 Production data can be stored in **Supabase PostgreSQL**.
 
-## Frontend
+### Frontend
 
 The React/Vite frontend can be deployed using a static hosting platform.
 
 ---
 
-# 🌐 Production Architecture
+## 🌐 Production Architecture
 
 ```text
                          INTERNET
@@ -932,7 +932,7 @@ The React/Vite frontend can be deployed using a static hosting platform.
 
 ---
 
-# 🏆 SIH Relevance
+## 🏆 SIH Relevance
 
 SkyGuard AI addresses the need for intelligent monitoring of distributed weather-station infrastructure.
 
@@ -951,13 +951,13 @@ The system can help monitoring teams identify potentially faulty or abnormal sta
 
 ---
 
-# 👥 Team
+## 👥 Team
 
-## Team Name
+### Team Name: **Elementalists**
 
-**Elementalists**
 
-## Team Members
+
+### Team Members
 
 | Name       | Role                                      |
 | ---------- | ----------------------------------------- |
@@ -972,7 +972,7 @@ Total Development Duration: 36 hrs
 
 ---
 
-# 📜 License
+## 📜 License
 
 This project is developed as part of the **Smart India Hackathon (SIH)**.
 
@@ -986,7 +986,7 @@ MIT License
 
 ---
 
-# ⭐ Acknowledgements
+## ⭐ Acknowledgements
 
 * **Smart India Hackathon**
 * **Python Open-Source Ecosystem**
@@ -999,7 +999,7 @@ MIT License
 
 ---
 
-# 📬 Contact
+## 📬 Contact
 
 For project-related queries:
 
