@@ -968,7 +968,7 @@ The system can help monitoring teams identify potentially faulty or abnormal sta
 | Lakshana M | Database / Cloud (5 hrs)                |
 | Mahalakshmi M | Research / Integration (4 hrs)       |
 
-Total Development duration: 36 hrs
+Total Development Duration: 36 hrs
 
 ---
 
