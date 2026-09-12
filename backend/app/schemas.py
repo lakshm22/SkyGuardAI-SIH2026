@@ -11,6 +11,8 @@ class SensorReading(BaseModel):
     pressure: float = Field(..., ge=850, le=1100)
     humidity: float = Field(..., ge=0, le=100)
     timestamp: Optional[datetime] = None
+    source: str = Field(default="api", max_length=40)
+    device_id: Optional[str] = Field(default=None, max_length=100)
 
 class AlertUpdate(BaseModel):
     status: Literal['Active', 'Resolved']
@@ -23,7 +25,7 @@ class StationCreate(BaseModel):
 
 class SimulationRequest(BaseModel):
     station_id: str
-    anomaly_type: Literal['temperature_spike','pressure_shift','humidity_spike','multi_parameter_spike','frozen_value','communication_error','normal'] = 'temperature_spike'
+    anomaly_type: Literal['temperature_spike','pressure_shift','humidity_spike','multi_parameter_spike','frozen_value','communication_error','regional_event','normal'] = 'temperature_spike'
     count: int = Field(default=1, ge=1, le=20)
 
 class AdminLogin(BaseModel):
