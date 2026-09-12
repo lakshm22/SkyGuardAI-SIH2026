@@ -525,7 +525,6 @@ SkyGuard-AI/
     │           ├── utils.ts
     │           ├── error-capture.ts
     │           ├── error-page.ts
-    │           ├── lovable-error-reporting.ts
     │           └── skyguard-api.ts
     │
     ├── docs/
