@@ -89,7 +89,7 @@ def init_db():
     if is_postgres:
         from sqlalchemy import text
         with engine.begin() as conn:
-            conn.execute(text(f'CREATE SCHEMA IF NOT EXISTS "{SCHEMA}"'))
+            conn.execute(text(f'ALTER TABLE {qualified} ADD COLUMN {column} {sql_type}'))
     Base.metadata.create_all(engine)
     # Lightweight forward migration for existing SQLite/PostgreSQL deployments.
     columns = {c["name"] for c in inspect(engine).get_columns("readings", schema=SCHEMA if is_postgres else None)}
