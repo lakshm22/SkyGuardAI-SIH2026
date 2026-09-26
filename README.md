@@ -884,12 +884,12 @@ The operator can then investigate the affected station.
 │                 SKYGUARD AI                   │
 ├───────────────────────────────────────────────┤
 │                                               │
-│  Total Stations    Active Alerts    Health   │
+│  Total Stations    Active Alerts    Health    │
 │       XX                XX            XX%     │
 │                                               │
 ├───────────────────────┬───────────────────────┤
 │                       │                       │
-│     Station Map       │    Sensor Trends     │
+│     Station Map       │    Sensor Trends      │
 │                       │                       │
 │                       │                       │
 ├───────────────────────┴───────────────────────┤
