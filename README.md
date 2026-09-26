@@ -1,4 +1,4 @@
-# 🚀 SkyGuard AI
+# ⛅ SkyGuard AI
 
 ### AI-Powered Anomaly Detection and Data-Quality Monitoring System for Automatic Weather Stations
 
